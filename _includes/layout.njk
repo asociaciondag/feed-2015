@@ -1,0 +1,187 @@
+<!doctype html>
+
+<html class="no-js" lang="gl">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>FEED 2015</title>
+
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="author" content="DAG - Asociación Galega de Deseñadores">
+
+        <link rel="stylesheet" href="./styles.css">
+    </head>
+
+    <body>
+        <!-- HEADER -->
+        <nav class="page-header wrapper" id="main-header">
+            <a href="/" class="page-logo" title="Asociación Galega de Deseñadores">
+                <img src="./img/dag.svg" alt="Asociación Galega de Deseño" inline>
+            </a>
+        </nav>
+        <!-- /HEADER -->
+
+          <article class="project">
+            <div class="project-head">
+              <header class="project-header">
+                <h1>{{ titulo | md(true) | safe }}</h1>
+                <div class="project-subtitle">{{ subtitulo | md | safe }}</div>
+              </header>
+
+              <nav class="menu-participantes">
+                <ul>
+                  {% for item in participantes %}
+                  <li><a href="#{{ item.id }}">{{ item.nome }}</a></li>
+                  {% endfor %}
+                </ul>
+              </nav>
+            </div>
+
+            <div class="project-intro">
+              <div class="wrapper">
+                {{ intro | md | safe }}
+              </div>
+            </div>
+
+            <section class="project-invitados wrapper" id="participantes">
+              {% for item in participantes %}
+              <article class="invitado" id="{{ item.id }}">
+                <div>
+                  <h1>
+                    {{ item.titulo or item.nome }}
+
+                    {% if item.boton %}	
+                    <a href="{{ item.boton.url }}" class="button-secondary">
+                      {{ item.boton.text }}
+                    </a>
+                    {% endif %}
+                  </h1>
+
+                  <div class="invitado-bio">
+                    {{ item.bio | md | safe }}
+                  </div>
+
+                  <ul class="invitado-actos">
+                    {% for acto in item.actos %}
+                    <li>
+                      <h2>{{ acto.titulo | md(true) | safe }}</h2>
+                      {{ acto.info | md | safe }}
+                    </li>
+                    {% endfor %}
+                  </ul>
+                </div>
+              </article>
+              {% endfor %}
+            </section>
+
+            <section class="project-calendario wrapper" id="programa">
+              <h1>Programa</h1>
+
+              <div class="calendario-dias">
+                {% for dia in programa %}
+                <div class="calendario-dia">
+                  <h2>{{ dia.dia }}</h2>
+                  <p>{{ dia.campo }}</p>
+
+                  <ul>
+                    {% for hora in dia.horas %}
+                    <li>
+                      <strong class="hora">{{ hora.hora }}</strong>
+                      <div>
+                        {{ hora.texto | md | safe }}
+                      </div>
+                    </li>
+                    {% endfor %}
+                  </ul>
+                </div>
+                {% endfor %}
+              </div>
+            </section>
+
+            {% if entradas %}
+            <section class="project-entradas wrapper">
+              <h1>{{ entradas.titulo }}</h1>
+
+              <table>
+                <thead>
+                  <tr>
+                    <th></th>
+                    {% for head in entradas.head %}
+                    <th>{{ head }}</th>
+                    {% endfor %}
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for row in entradas.body %}
+                  <tr>
+                    <th>{{ row.titulo }}</th>
+
+                    {% for prezo in row.prezos %}
+                    <td>
+                      <strong>{{ prezo.prezo }}</strong><br>
+                      <small>TIPO {{ prezo.tipo }}</small>
+                    </td>
+                    {% endfor %}
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+
+              {% if entradas.footer %}
+              <footer>
+                {{ entradas.footer | md | safe }}
+              </footer>
+              {% endif %}
+            </section>
+            {% endif %}
+
+            <!--
+            <section class="project-onde" id="onde">
+              <iframe id="onde-gmap" src="https://www.google.com/maps/embed?pb=!1m28!1m12!1m3!1d27600.203634707093!2d-8.417765578846987!3d43.35372517593172!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!4m13!3e3!4m5!1s0xd2e7b818682ad83%3A0xe0d03a8890573d6!2sFundaci%C3%B3n+Luis+Seoane%2C+R%C3%BAa+San+Francisco%2C+27%2C+15001+A+Coru%C3%B1a!3m2!1d43.3686941!2d-8.3894294!4m5!1s0xd2e7cba5bb3107b%3A0x93831a251a29aaeb!2sEXPOCoru%C3%B1a%2C+Juana+Capdevielle+2%2C+15008+A+Coru%C3%B1a!3m2!1d43.3399297!2d-8.410908!5e0!3m2!1ses!2ses!4v1446069711907" width="640" height="480"></iframe>
+            </section>
+            -->
+
+            {% if medios %}
+              <aside class="project-news-external wrapper">
+                <ul>
+                  {% for link in medios %}
+                  <li>
+                      <h3>
+                        <a href="{{ link.url }}">
+                          {{ link.titulo }}
+                        </a>
+                      </h3>
+                      <small>{{ link.medio }}</small>
+                    </a>
+                  </li>
+                  {% endfor %}
+                </ul>
+              </aside>
+            {% endif %}
+
+            <aside class="project-social-highlight">
+              <div>
+                <a data-flickr-embed='true' href='https://www.flickr.com/photos/asociaciondag/sets/72157662978309333' title='FEED 2015 by Asociación DAG, on Flickr'><img src='https://live.staticflickr.com/1688/24784186953_d0a5b6edd4_b.jpg'></a><script async src='https://embedr.flickr.com/assets/client-code.js' charset='utf-8'></script>
+              </div>
+            </aside>
+
+            <section class="project-colaboradores wrapper" id="colaboradores">
+              {% for grupo in logos %}
+              <div>
+                <h2>{{ grupo.titulo }}:</h2>
+
+                <ul>
+                  {% for logo in grupo.items %}
+                  <li>
+                    <a href="{{ logo.url }}" title="{{ logo.titulo }}">
+                      <img src="./img/{{ logo.logo }}" alt="{{ logo.titulo }}">
+                    </a>
+                  </li>
+                  {% endfor %}
+                </ul>
+              </div>
+              {% endfor %}
+            </section>
+          </article>
+    </body>
+</html>
